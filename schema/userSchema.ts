@@ -1,24 +1,22 @@
 import mongoose from "mongoose";
 import mongooseAjvPlugin from "mongoose-ajv-plugin";
+import ProductSchema from "./productSchema";
 
-const Product = require("./product");
+const Schema = mongoose.Schema;
 
-const user = new mongoose.Schema({
+const userSchema = new Schema({
   username: {
     type: String,
-    required: true,
   },
   firstname: {
     type: String,
-    required: true,
   },
   lastname: {
     type: String,
-    required: true,
   },
   email: {
     type: String,
-    require: true,
+    required: true,
     unique: true,
   },
   password: {
@@ -27,9 +25,14 @@ const user = new mongoose.Schema({
   },
   gender: {
     type: String,
-    enum: ["male", "female", "other"],
+    enum: ["male", "female", "others"],
   },
-  products: Product,
+  products: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "ProductSchema",
+    },
+  ],
   sales: {
     type: Number,
   },
@@ -41,8 +44,8 @@ const user = new mongoose.Schema({
   },
 });
 
-user.plugin(mongooseAjvPlugin, { schema: user });
+userSchema.plugin(mongooseAjvPlugin, { schema: userSchema });
 
-const User = mongoose.model("User", user);
+const UserSchema = mongoose.model("UserSchema", userSchema);
 
-module.exports = User;
+export default UserSchema;
